@@ -2,63 +2,65 @@ const Order = require("./Order");
 
 const OrderState = Object.freeze({
     WELCOMING:   Symbol("welcoming"),
-    SIZE:   Symbol("size"),
-    TOPPINGS:   Symbol("toppings"),
-    DRINKS:  Symbol("drinks"),
-    PAYMENT: Symbol("payment")
+    MENU:   Symbol("menu"),
 });
 
 module.exports = class ShwarmaOrder extends Order{
     constructor(sNumber, sUrl){
         super(sNumber, sUrl);
         this.stateCur = OrderState.WELCOMING;
-        this.sSize = "";
-        this.sToppings = "";
-        this.sDrinks = "";
-        this.sItem = "shawarama";
+        this.sMenu = ""
     }
+    
     handleInput(sInput){
-        let aReturn = [];
+        var menu = {"borewors": 8.00,"steak": 15.00, "ribs": 9.00, "chicken": 12.00, "no":0.00};
+        let aReturn = []; 
+
         switch(this.stateCur){
             case OrderState.WELCOMING:
-                this.stateCur = OrderState.SIZE;
-                aReturn.push("Welcome to Richard's Shawarma.");
-                aReturn.push("What size would you like?");
-                break;
-            case OrderState.SIZE:
-                this.stateCur = OrderState.TOPPINGS
-                this.sSize = sInput;
-                aReturn.push("What toppings would you like?");
-                break;
-            case OrderState.TOPPINGS:
-                this.stateCur = OrderState.DRINKS
-                this.sToppings = sInput;
-                aReturn.push("Would you like drinks with that?");
-                break;
-            case OrderState.DRINKS:
-                this.stateCur = OrderState.PAYMENT;
-                this.nOrder = 15;
-                if(sInput.toLowerCase() != "no"){
-                    this.sDrinks = sInput;
-                }
-                aReturn.push("Thank-you for your order of");
-                aReturn.push(`${this.sSize} ${this.sItem} with ${this.sToppings}`);
-                if(this.sDrinks){
-                    aReturn.push(this.sDrinks);
-                }
-                aReturn.push(`Please pay for your order here`);
+                this.stateCur = OrderState.MENU;
+                aReturn.push("Welcome to The Braii..");
+                aReturn.push(`We are a pop-up restaurant and currently only offer 4 items on our menu! You can place an order through this SMS portal or you can visit our App to place an order the link is posted below.`);
                 aReturn.push(`${this.sUrl}/payment/${this.sNumber}/`);
+                aReturn.push("Our Menu is as follows: Borewors, T-Bone Steak, Sticky ribs, Peri-Peri Chicken");
+                aReturn.push("When ordering please enter BOREWORS or STEAK or RIBS or CHICKEN.");
                 break;
-            case OrderState.PAYMENT:
-                console.log(sInput);
-                this.isDone(true);
-                let d = new Date();
-                d.setMinutes(d.getMinutes() + 20);
-                aReturn.push(`Your order will be delivered at ${d.toTimeString()}`);
-                break;
+            case OrderState.MENU:
+              if(sInput.toLowerCase() == "borewors" ||
+              sInput.toLowerCase() == "steak" ||
+              sInput.toLowerCase() == "ribs" ||
+              sInput.toLowerCase() == "chicken" ||
+              sInput.toLowerCase() == "no"){
+                 this.stateCur = OrderState.PAYMENT;
+                 this.sMenu = sInput; 
+              }else{
+                aReturn.push("Please enter one of the following BOREWORS or STEAK or RIBS or CHICKEN or say NO.")
+              }
+              
+              var total;
+              total= menu[this.sMenu];
+              this.nOrder = total;
+
+              aReturn.push("Thank-you for your order of");
+              aReturn.push(`${this.sMenu}`);
+              aReturn.push("Your Subtotal for your order is",total);
+              aReturn.push(`Please pay for your order here`);
+              aReturn.push(`${this.sUrl}/payment/${this.sNumber}/`);
+              let d = new Date();
+              d.setMinutes(d.getMinutes() + 20);
+              aReturn.push(`Your order will be delivered at ${d.toTimeString()}`);
+             break;
+
+             case OrderState.PAYMENT:
+              this.stateCur = OrderState.PAYMENT;
+              console.log(sInput);
+              console.log(sInput.purchase_units[0]);
+              this.isDone(true);
+            break;
         }
         return aReturn;
     }
+
     renderForm(sTitle = "-1", sAmount = "-1"){
       // your client id should be kept private
       if(sTitle != "-1"){
