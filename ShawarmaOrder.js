@@ -67,7 +67,7 @@ module.exports = class ShwarmaOrder extends Order{
         this.sItem = sTitle;
       }
       if(sAmount != "-1"){
-        this.nOrder = sAmount;
+        this.nMenu = sAmount;
       }
       const sClientID = process.env.SB_CLIENT_ID || 'put your client id here for testing ... Make sure that you delete it before committing'
       return(`
@@ -83,7 +83,7 @@ module.exports = class ShwarmaOrder extends Order{
         <script
           src="https://www.paypal.com/sdk/js?client-id=${sClientID}"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
         </script>
-        Thank you ${this.sNumber} for your ${this.sItem} order of $${this.nOrder}.
+        Thank you ${this.sNumber} for your ${this.sItem} order of $${this.nMenu}.
         <div id="paypal-button-container"></div>
   
         <script>
