@@ -15,24 +15,19 @@ module.exports = class ShwarmaOrder extends Order{
         this.sSize = "";
         this.sToppings = "";
         this.sDrinks = "";
-        this.sItem = "shawarama";
+        this.sItem = "shwarma";
     }
     handleInput(sInput){
         let aReturn = [];
         switch(this.stateCur){
             case OrderState.WELCOMING:
                 this.stateCur = OrderState.SIZE;
-                aReturn.push("Welcome to Richard's Shawarma.");
-                aReturn.push("What size would you like?");
+                aReturn.push("Welcome to The Braii Pop-Up!");
+                aReturn.push("We have Borewors, T-bone, ribs, chicken");
                 break;
             case OrderState.SIZE:
-                this.stateCur = OrderState.TOPPINGS
-                this.sSize = sInput;
-                aReturn.push("What toppings would you like?");
-                break;
-            case OrderState.TOPPINGS:
                 this.stateCur = OrderState.DRINKS
-                this.sToppings = sInput;
+                this.sSize = sInput;
                 aReturn.push("Would you like drinks with that?");
                 break;
             case OrderState.DRINKS:
@@ -42,7 +37,7 @@ module.exports = class ShwarmaOrder extends Order{
                     this.sDrinks = sInput;
                 }
                 aReturn.push("Thank-you for your order of");
-                aReturn.push(`${this.sSize} ${this.sItem} with ${this.sToppings}`);
+                aReturn.push(`${this.sSize}`);
                 if(this.sDrinks){
                     aReturn.push(this.sDrinks);
                 }
