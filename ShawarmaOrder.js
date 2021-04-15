@@ -15,7 +15,7 @@ module.exports = class ShwarmaOrder extends Order{
         this.sSize = "";
         this.sToppings = "";
         this.sDrinks = "";
-        this.sItem = "shwarma";
+        this.sItem = "Braii";
     }
     handleInput(sInput){
         let aReturn = [];
@@ -32,7 +32,7 @@ module.exports = class ShwarmaOrder extends Order{
                 break;
             case OrderState.DRINKS:
                 this.stateCur = OrderState.PAYMENT;
-                this.nOrder = 15;
+                this.nOrder = 21;
                 if(sInput.toLowerCase() != "no"){
                     this.sDrinks = sInput;
                 }
