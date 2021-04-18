@@ -50,6 +50,8 @@ module.exports = class ShwarmaOrder extends Order{
                 let d = new Date();
                 d.setMinutes(d.getMinutes() + 20);
                 aReturn.push(`Your order will be delivered at ${d.toTimeString()}`);
+                aReturn.push(`show this QR Code when you pick up.`);
+                aReturn.push(`https://https://ebra3120.github.io/delivery-QR-code./`);
                 break;
         }
         return aReturn;
